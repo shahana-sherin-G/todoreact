@@ -1,6 +1,6 @@
 import '@mantine/core/styles.css'; // Import Mantine core styles once at the top
 import { MantineProvider } from '@mantine/core';
-import TodoApp from './todo';
+import TodoApp from './TodoApp';
 
 
 
