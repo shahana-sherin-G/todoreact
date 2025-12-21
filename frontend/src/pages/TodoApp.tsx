@@ -1,53 +1,32 @@
-import { useEffect, useState, useCallback, memo } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   Container,
   Title,
   TextInput,
   Button,
-  Checkbox,
-  ActionIcon,
   Group,
-  Paper,
   Loader,
   Text,
   Stack,
 } from "@mantine/core";
-import { IconTrash } from "@tabler/icons-react";
+import Bun from "bun";
+import TodoItem from "../components/TodoItem";
 
-const API_URL = "http://localhost:3000";
 
+
+
+
+
+
+//const API_URL = import.meta.env.API_URL || "http://localhost:3000";
+
+  
 interface Todo {
   id: number;
   text: string;
   completed: number; 
 }
-const TodoItem = memo(({ 
-  todo, 
-  onToggle, 
-  onDelete 
-}: { 
-  todo: Todo; 
-  onToggle: (todo: Todo) => void; 
-  onDelete: (id: number) => void; 
-}) => (
-  <Paper withBorder p="sm" shadow="xs">
-    <Group justify="space-between">
-      <Checkbox
-        checked={Boolean(todo.completed)}
-        onChange={() => onToggle(todo)}
-        label={todo.text}
-        styles={{ label: { cursor: 'pointer' } }}
-      />
-      <ActionIcon
-        color="red"
-        variant="subtle"
-        onClick={() => onDelete(todo.id)}
-      >
-        <IconTrash size={18} />
-      </ActionIcon>
-    </Group>
-  </Paper>
-));
+
 
 export default function TodoApp() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -56,7 +35,7 @@ export default function TodoApp() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch(`${API_URL}/todos`)
+    fetch(`/todos`)
       .then((res) => {
         if (!res.ok) throw new Error();
         return res.json();
@@ -69,9 +48,8 @@ export default function TodoApp() {
   const addTodo = async () => {
     if (!input.trim()) return;
     try {
-      const res = await fetch(`${API_URL}/todos`, {
+      const res = await fetch(`/todos`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: input.trim() }),
       });
       if (!res.ok) throw new Error();
@@ -93,7 +71,7 @@ export default function TodoApp() {
     );
 
     try {
-      const res = await fetch(`${API_URL}/todos/${todo.id}`, {
+      const res = await fetch(`/todos/${todo.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         // Backend expects 'boolean', frontend state uses 'number'
@@ -111,7 +89,7 @@ export default function TodoApp() {
     setTodos((prev) => prev.filter((t) => t.id !== id));
 
     try {
-      const res = await fetch(`${API_URL}/todos/${id}`, { method: "DELETE" });
+      const res = await fetch(`/todos/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error();
     } catch {
       setTodos(originalTodos); 
