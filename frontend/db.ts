@@ -16,16 +16,7 @@ db.run(`
 export interface TodoDBRaw {
   id: number;
   text: string;
-  completed: number; 
-}
-
-// Function to convert DB integer (0/1) to client boolean (true/false)
-export const FormatToDoClient = (todo: TodoDBRaw) => {
-  return {
-    id: todo.id,
-    text: todo.text,
-    completed: Boolean(todo.completed),
-  };
+  completed: boolean; 
 }
 
 // Prepare SQL statements once for efficiency and EXPORT them
@@ -35,3 +26,12 @@ export const update = db.prepare("UPDATE todos SET completed = ? WHERE id = ?");
 export const remove = db.prepare("DELETE FROM todos WHERE id = ?");
 
 console.log("Database and table prepared successfully.");
+
+
+const myVar = 0;
+
+if (myVar) {
+  console.log("My variable is truthy.");
+} else {
+  console.log("My variable is falsy.");
+}
